@@ -1,25 +1,7 @@
 import random
 
-from classes import spell
-from classes import healing_spell
-
-
-class BColors:
-    PINK = '\033[95m'
-    BLUE = '\033[94m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    RED = '\033[91m'
-    END = '\033[0m'
-    BOLD = '\033[1m'
-
-    def disable(self):
-        self.PINK = ''
-        self.BLUE = ''
-        self.GREEN = ''
-        self.YELLOW = ''
-        self.RED = ''
-        self.END = ''
+from classes import color
+from classes.spell import Spell, HealingSpell
 
 
 class Person:
@@ -32,7 +14,11 @@ class Person:
         self.atkh = atk + 10
         self.dfn = dfn
         self.mag = mag
-        self.actions = ["Attack", "Magic", "Use Items"]
+        self.actions = ["Attack"]
+        if mag:
+            self.actions.insert(len(self.actions),"Magic")
+        if items:
+            self.actions.insert(len(self.actions), "Use Items")
         self.items = items
         self.name = name
 
@@ -43,7 +29,6 @@ class Person:
         self.hp -= dmg
         if self.hp <= 0:
             self.hp = 0
-        return "Current hp:", self.hp, "Max hp: ", self.maxhp
 
     def get_hp(self):
         return self.hp
@@ -71,14 +56,14 @@ class Person:
 
     def choose_action(self):
         index = 1
-        print(BColors.GREEN + BColors.BOLD + "ACTIONS: " + BColors.END)
+        print(color.BColors.GREEN + color.BColors.BOLD + "ACTIONS: " + color.BColors.END)
         for item in self.actions:
             print("    " + str(index) + ": " + item)
             index += 1
 
     def choose_magic(self):
         index = 1
-        print("\n" + BColors.BLUE + BColors.BOLD + "SPELLS: " + BColors.END)
+        print("\n" + color.BColors.BLUE + color.BColors.BOLD + "SPELLS: " + color.BColors.END)
         for _ in self.mag:
             print("    " + str(index) + "." + self.mag[index - 1].get_spell_name() + " | Cost: "
                   + str(self.mag[index - 1].get_spell_cost())
@@ -88,14 +73,15 @@ class Person:
 
     def choose_item(self):
         i = 1
-        print("\n" + BColors.GREEN + BColors.BOLD + "ITEMS: " + BColors.END)
+        print("\n" + color.BColors.GREEN + color.BColors.BOLD + "ITEMS: " + color.BColors.END)
         for item in self.items:
             print("    " + str(i) + ". " + item["item"].name + " : " + item["item"].description + " x"
                   + str(item["qtd"]))
             i += 1
         print("    " + "0 to go back")
 
-    def choose_target(self, foeparty):
+    @staticmethod
+    def choose_target(foeparty):
         i = 0
         print("TARGETS:")
         for foe in foeparty:
@@ -105,8 +91,9 @@ class Person:
         target = int(input("Choose a target: ")) - 1
         return target
 
-    def choose_spell_target(self, foeparty, party, magic):
-        if isinstance(magic, str):
+    @staticmethod
+    def choose_spell_target(foeparty, party, magic):
+        if type(magic) is Spell:
             i = 0
             print("TARGETS:")
             for foe in foeparty:
@@ -115,7 +102,7 @@ class Person:
             print("0. to return")
             target = int(input("Choose a target: ")) - 1
             return target
-        elif isinstance(magic, int):
+        elif type(magic) is HealingSpell:
             i = 0
             print("TARGETS:")
             for ally in party:
@@ -160,8 +147,8 @@ class Person:
         while len(str(self.mp) + "/" + str(self.maxmp)) + len(mp_space) < 9:
             mp_space += " "
 
-        print(BColors.BOLD + self.name + name_space + " : "
-              + "HP " + str(self.hp) + "/" + str(self.maxhp) + hp_space + " " + BColors.GREEN + hpbar
-              + BColors.END + BColors.BOLD + "   "
-              + "MP " + str(self.mp) + "/" + str(self.maxmp) + mp_space + BColors.BLUE + mpbar
-              + BColors.END)
+        print(color.BColors.BOLD + self.name + name_space + " : "
+              + "HP " + str(self.hp) + "/" + str(self.maxhp) + hp_space + " " + color.BColors.GREEN + hpbar
+              + color.BColors.END + color.BColors.BOLD + "   "
+              + "MP " + str(self.mp) + "/" + str(self.maxmp) + mp_space + color.BColors.BLUE + mpbar
+              + color.BColors.END)

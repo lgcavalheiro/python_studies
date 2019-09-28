@@ -1,6 +1,6 @@
 import random
 
-#from classes.game import BColors
+from classes import color
 
 
 class Spell:
@@ -27,4 +27,29 @@ class Spell:
         caster.reduce_mp(self.cost)
         dmg = self.generate_spell_dmg()
         target.take_dmg(dmg)
-        print("Player casts", self.name, "dealing", dmg, "points of damage!")
+        print(color.BColors.BLUE, caster.get_name()
+              , color.BColors.END, "casts"
+              , color.BColors.RED, self.name
+              , color.BColors.END, "on"
+              , color.BColors.RED, target.get_name()
+              , color.BColors.END, "dealing"
+              , color.BColors.RED, dmg
+              , color.BColors.END, "points of damage!")
+
+
+class HealingSpell(Spell):
+    def generate_spell_dmg(self):
+        return -self.dmg
+
+    def cast_spell(self, caster, target):
+        caster.reduce_mp(self.cost)
+        dmg = self.generate_spell_dmg()
+        target.take_dmg(dmg)
+        print(color.BColors.BLUE, caster.get_name()
+              , color.BColors.END, "casts"
+              , color.BColors.GREEN, self.name
+              , color.BColors.END, "on"
+              , color.BColors.GREEN, target.get_name()
+              , color.BColors.END, "healing for"
+              , color.BColors.GREEN, -dmg
+              , color.BColors.END, "health points!")
