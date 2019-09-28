@@ -1,6 +1,6 @@
 import random
 
-from classes.game import BColors
+#from classes.game import BColors
 
 
 class Spell:
@@ -27,5 +27,4 @@ class Spell:
         caster.reduce_mp(self.cost)
         dmg = self.generate_spell_dmg()
         target.take_dmg(dmg)
-        print("Player casts", self.name, "dealing", BColors.FAIL, BColors.BOLD, dmg, "points of damage!",
-              BColors.ENDC)
+        print("Player casts", self.name, "dealing", dmg, "points of damage!")
