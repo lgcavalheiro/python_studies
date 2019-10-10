@@ -16,7 +16,10 @@ for item in links:
     if item_text and item_href:
         print(item_text)
         print(item_href)
-        print("Summary: ", item.find("a").parent.parent.find("p").text)
+        try:
+            print("Summary: ", item.find("a").parent.parent.find("p").text)
+        except AttributeError:
+            print("Attribute error!")
 
         children = item.children
         for child in children:
